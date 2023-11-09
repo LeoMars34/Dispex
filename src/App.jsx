@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
-import { getA, getApartmets, getClients, getHouses, getStreets } from './Api';
+import { getApartmets, getClients, getHouses, getStreets } from './Api';
+import { PopUp } from './PopUp';
 
 function App() {
     const [street, setStreet] = useState([]);
     const [houses, setHouses] = useState([]);
     const [flats, setFlats] = useState([]);
+    const [currentFlat, setCurrentFlat] = useState();
     const [clients, setClients] = useState([]);
+
+    console.log(flats);
 
     function displayHouses(e, id) {
         if (e.target.parentNode.classList.contains('active')) {
@@ -29,7 +33,6 @@ function App() {
     }
     function displayClients(addressId) {
         getClients(addressId).then((data) => {
-            console.log(data);
             setClients(data);
         });
     }
@@ -38,13 +41,16 @@ function App() {
         getStreets().then((data) => {
             setStreet(data);
         });
-        getA().then((data) => {
-            console.log(data);
-        });
     }, []);
 
     return (
-        <div className="App">
+        <div className="main">
+            {currentFlat && (
+                <PopUp
+                    setCurrentFlat={setCurrentFlat}
+                    currentFlat={currentFlat}
+                />
+            )}
             <div className="accardion">
                 <div className="street">
                     {street.map((s) => (
@@ -73,13 +79,13 @@ function App() {
                         <div className="flats">
                             {flats.map((f) => (
                                 <div
-                                    key={f.id}
+                                    key={f.flat}
                                     className="currentFlats"
                                     onClick={() => {
-                                        displayClients(f.id);
+                                        setCurrentFlat(f);
                                     }}
                                 >
-                                    {f.name}
+                                    {f.flat}
                                 </div>
                             ))}
                         </div>
