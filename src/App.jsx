@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getApartmets, getClients, getHouses, getStreets } from './Api';
+import { getApartmets, getHouses, getStreets } from './Api';
 import { PopUp } from './PopUp';
 
 function App() {
@@ -7,10 +7,8 @@ function App() {
     const [houses, setHouses] = useState([]);
     const [flats, setFlats] = useState([]);
     const [currentFlat, setCurrentFlat] = useState();
-    const [clients, setClients] = useState([]);
 
-    console.log(flats);
-
+    /*Отрисовка домов*/
     function displayHouses(e, id) {
         if (e.target.parentNode.classList.contains('active')) {
             e.target.parentNode.classList.toggle('active');
@@ -21,6 +19,7 @@ function App() {
             e.target.parentNode.classList.toggle('active');
         });
     }
+    /*Отрисовка квартир*/
     function displayFlats(e, id) {
         if (e.target.parentNode.classList.contains('active')) {
             e.target.parentNode.classList.toggle('active');
@@ -29,11 +28,6 @@ function App() {
         getApartmets(id).then((data) => {
             setFlats(data);
             e.target.parentNode.classList.toggle('active');
-        });
-    }
-    function displayClients(addressId) {
-        getClients(addressId).then((data) => {
-            setClients(data);
         });
     }
 

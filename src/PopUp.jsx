@@ -3,7 +3,7 @@ import { addClients, bindClient } from './Api';
 
 export function PopUp({ currentFlat, setCurrentFlat }) {
     const [client, setClients] = useState();
-    console.log(currentFlat);
+
     /*Валидация Имя*/
     function validateName(e) {
         let fio = e.target;
@@ -17,7 +17,7 @@ export function PopUp({ currentFlat, setCurrentFlat }) {
         let pattern = /^((\8)+([0-9]){10})$/;
         let regex = /[^\d]/g;
         let index = phone.value.indexOf('8');
-        if (index != -1) {
+        if (index !== -1) {
             phone.value = phone.value.slice(index);
         } else {
             phone.value = '';
@@ -31,7 +31,7 @@ export function PopUp({ currentFlat, setCurrentFlat }) {
         } else {
             phone.classList.add('red_border');
         }
-        if (phone.value == '') {
+        if (phone.value === '') {
             phone.classList.remove('red_border');
         }
     }
@@ -44,14 +44,17 @@ export function PopUp({ currentFlat, setCurrentFlat }) {
         } else {
             email.classList.add('red_border');
         }
-        if (email.value == '') {
+        if (email.value === '') {
             email.classList.remove('red_border');
         }
     }
+    /*Добавление нового клиента*/
     function addNewClients() {
         let name = '';
         let phone = '';
         let email = '';
+        let arrInput = document.querySelectorAll('input');
+        let error = false;
         if (document.getElementById('name').value) {
             name = document.getElementById('name').value;
         }
@@ -61,10 +64,22 @@ export function PopUp({ currentFlat, setCurrentFlat }) {
         if (document.getElementById('email').value) {
             email = document.getElementById('email').value;
         }
-        addClients(name, phone, email).then((response) => {
-            setClients(response.id);
+        arrInput.forEach((input) => {
+            if (input.classList.contains('red_border')) {
+                alert('Неверно внесены данные');
+                error = true;
+            }
         });
+        if (error === true) {
+            return;
+        } else {
+            addClients(name, phone, email).then((response) => {
+                setClients(response.id);
+                alert('Клиент успешно создан');
+            });
+        }
     }
+    /*Привязка клиента к квартире*/
     function bind(client) {
         let AddressId = currentFlat.addressId;
         let ClientId = client;
@@ -74,10 +89,8 @@ export function PopUp({ currentFlat, setCurrentFlat }) {
     }
     /*Закртие popUp*/
     function closePopUp(e) {
-        {
-            if (!e.target.closest('.container__PopUp')) {
-                setCurrentFlat();
-            }
+        if (!e.target.closest('.container__PopUp')) {
+            setCurrentFlat();
         }
     }
 

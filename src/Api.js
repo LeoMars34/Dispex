@@ -3,7 +3,6 @@ export async function getStreets() {
     let response = await fetch('https://dispex.org/api/vtest/Request/streets');
     return await response.json();
 }
-
 /*Получение домов*/
 export async function getHouses(id) {
     let response = await fetch(
@@ -27,36 +26,45 @@ export async function getClients(addressId) {
 }
 /*Создание нового жильца*/
 export async function addClients(name, phone, email) {
-    let response = await fetch(
-        `https://dispex.org/api/vtest/HousingStock/client`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: name,
-                phone: phone,
-                email: email,
-            }),
-        }
-    );
-    return await response.json();
+    try {
+        let response = await fetch(
+            `https://dispex.org/api/vtest/HousingStock/client`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    phone: phone,
+                    email: email,
+                }),
+            }
+        );
+
+        return await response.json();
+    } catch (error) {
+        return alert(error.message);
+    }
 }
-/*Создание нового жильца*/
+/*Привязка нового жильца*/
 export async function bindClient(AddressId, ClientId) {
-    let response = await fetch(
-        `https://dispex.org/api/vtest/HousingStock/bind_client`,
-        {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                AddressId: AddressId,
-                ClientId: ClientId,
-            }),
-        }
-    );
-    return await response.json();
+    try {
+        let response = await fetch(
+            `https://dispex.org/api/vtest/HousingStock/bind_client`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    AddressId: AddressId,
+                    ClientId: ClientId,
+                }),
+            }
+        );
+        return await response.json();
+    } catch (error) {
+        return alert(error.message);
+    }
 }
